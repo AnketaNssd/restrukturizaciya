@@ -423,6 +423,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     };
 
     try {
+
   const payload = new URLSearchParams();
   payload.append('data', JSON.stringify(data));
 
@@ -432,43 +433,44 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     body: payload
   });
 
-  // При no-cors ответ проверить нельзя,
-  // поэтому считаем отправку успешной
-  // если fetch не упал критически
+  // Скрываем форму
+  document.querySelector('.contract-wrap').style.display = 'none';
+  document.querySelector('.sign-wrap').style.display = 'none';
 
-  document.getElementById('main-container').innerHTML = '';
-
+  // Показываем экран успеха
   const success = document.getElementById('successScreen');
   success.style.display = 'block';
 
-  document.getElementById('main-container').appendChild(success);
-
   document.getElementById('successDetails').innerHTML = `
-    <strong>Данные внесены:</strong>
+    <strong>Данные внесены:</strong><br>
     ${data['ФИО']}<br>
     ${data['Телефон']}<br>
-    ${data['Тариф']}<br>
-    <span style="font-size:11px;color:#9ca3af;margin-top:6px;display:block">
+    ${data['Тариф']}<br><br>
+
+    <span style="font-size:11px;color:#9ca3af">
       ${data['Дата и время']}
     </span>
   `;
 
 } catch(err) {
+
   console.error(err);
 
-  // Даже если fetch дал opaque response,
-  // данные часто уже записаны в таблицу
+  // Даже если no-cors не дает ответ,
+  // часто запись уже есть в таблице
 
-  document.getElementById('main-container').innerHTML = '';
+  document.querySelector('.contract-wrap').style.display = 'none';
+  document.querySelector('.sign-wrap').style.display = 'none';
 
   const success = document.getElementById('successScreen');
   success.style.display = 'block';
 
-  document.getElementById('main-container').appendChild(success);
-
   document.getElementById('successDetails').innerHTML = `
-    <strong>Договор подписан.</strong><br>
-    
+    <strong>Договор подписан.</strong><br><br>
+
+    <span style="font-size:11px;color:#9ca3af">
+      Попробуйте не закрывать страницу 3-5 секунд
+    </span>
   `;
 }
   });
